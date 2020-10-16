@@ -1,0 +1,177 @@
+Legenda:
+( dropped )?                    opcional
+( DocReference )+               acontece um ou mais vezes
+( ConstantVariable )*           acontece zero ou mais vezes
+[ ]                             conjunto de elementos
+
+** users should be aware that ReqSpec is case sensitive
+** This is different from AADL, which is not case sensitive
+
+
+
+###############################################################################
+###############################################################################
+###############################################################################
+
+
+goal Name ( : Title )?
+( for TargetElement )?
+[
+    ( category (CategoryReference )+ )?
+    ( description Description)?
+    ( Constant )*
+    ( WhenCondition )*
+    ( rationale String )?
+    ( refines ( <Goal> )+ )?
+    ( conflicts with ( <Goal> )+)?
+    ( evolves ( <Goal> )+)?
+    ( dropped ( String )? )?
+    ( stakeholder ( <Stakeholder> )+ )?
+    ( see goal ( <Goal> )+)?
+    ( see document ( DocReference )+ )?
+    ( issues (String)+ )?
+    ( ChangeUncertainty )?
+]
+
+stakeholder goals QualifiedName ( : Title )?
+for ( TargetClassifier | all )
+( use constants <GlobalConstantSet>* )?
+[
+    ( description )?
+    ( Constant )*
+    ( Goal )+
+    ( see document ( DocReference )+ )?
+    ( issues (String)+ )?
+]
+
+###############################################################################
+###############################################################################
+###############################################################################
+
+
+
+requirement Name ( : Title )?
+( for TargetElement )?
+[
+    ( category (CategoryReference )+ )?
+    ( description Description)?
+    ( Variable )*
+    ( WhenCondition )?
+    ( Predicate )?
+    ( rationale String )?
+    ( mitigates ( <Hazard> )+ )?
+    ( refines ( <Requirement> )+)?
+    ( decomposes ( <Requirement> )+)?
+    ( inherits ( <Requirement> )+)?
+    ( evolves ( <Requirement> )+)?
+    ( dropped ( String )? )?
+    ( development stakeholder ( <Stakeholder> )+ )?
+    ( see goal ( <Goal> )+)?
+    ( see requirement ( <Requirement> )+)?
+    ( see document ( DocReference )+ )?
+    ( issues (String)+ )?
+    ( ChangeUncertainty )?
+]
+
+system requirements QualifiedName ( : Title )?
+for TargetClassifier
+( use constants <GlobalConstantSet>* )?
+[
+    ( description Description )?
+    ( Variable )*
+    ( SystemRequirement )*
+    ( include <GlobalRequirementSet or global requirement> ( for ComponentCategory+ | self )
+    ( see document ( DocReference )+ )?
+    ( see goals ( <StakeholderGoals or GoalsDocument> )+ )?
+    ( issues (String)+ )?
+]
+
+###############################################################################
+###############################################################################
+###############################################################################
+
+
+
+global requirements QualifiedName ( : Title )?
+( use constants <GlobalConstantSet>* )?
+[
+    ( description Description )?
+    ( see document ( DocReference )+ )?
+    ( see goals ( <StakeholderGoals or GoalsDocument> )+ )?
+    ( Variable )*
+    ( GlobalRequirement )*
+    ( issues (String)+ )?
+]
+
+requirement Name ( : Title )?
+( for ComponentCategory+ | connection )?
+[
+    // Same as for SystemRequirement
+]
+
+
+###############################################################################
+###############################################################################
+###############################################################################
+
+// ------------------------------------------------ GOAL
+document QualifiedName ( : Title )?
+[
+    ( description String )?
+    ( Goal | GoalsDocumentSection )+
+    ( issues (String)+ )?
+]
+
+section Name ( : Title )?
+[
+    ( description String )?
+    ( Goal | DocumentSection )+
+    ( issues (String)+ )?
+]
+
+// ------------------------------------------------ REQUERIMENT
+document QualifiedName ( : Title )?
+[
+    ( description String )?
+    ( Requirement | RequirementsDocumentSection )+
+    ( issues (String)+ )?
+]
+
+section Name ( : Title )?
+[
+    ( description String )?
+    ( Requirement | DocumentSection )+
+    ( issues (String)+ )?
+]
+
+
+
+
+###############################################################################
+###############################################################################
+###############################################################################
+
+
+
+organization Name
+( Stakeholder )+
+
+stakeholder Name
+[
+    ( full name String )?
+    ( title String )?
+    ( description String )?
+    ( role String )?
+    ( email String )?
+    ( phone String )?
+    ( supervisor <Stakeholder> )?
+]
+
+
+
+WhenCondition ::=
+when in modes <Mode> ( , <Mode> )*
+|
+when in error state <ErrorState> ( , <ErrorState> )*
+|
+when expression
