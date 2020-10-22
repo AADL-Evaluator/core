@@ -76,7 +76,9 @@ public class BindingUtils
                 case TYPE_HARDWARE_SOFTWARE_NOT_DEFINED : return "Erro: hardware/software not defined.";
                 case TYPE_COMPATIBLE : return "Compatible";
                 case TYPE_INCOMPATIBLE : return "Incompatible";
-                case TYPE_COMPATIBLE_WITH_WRAPPER : return "Compatible with wrapper";
+                case TYPE_COMPATIBLE_WITH_WRAPPER : return isHardware( system , partA , partB )
+                        ? "Compatible with hardware conversor" 
+                        : "Compatible with wrapper";
                 default: return "unknwon";
             }
         }
@@ -160,6 +162,70 @@ public class BindingUtils
         }
         
         return value;
+    }
+    
+    public static boolean isHardware( AutomaticBinding binding ) throws Exception
+    {
+        return isHardware( binding.getSystem() , binding.getPartA() , binding.getPartB() );
+    }
+    
+    public static boolean isHardware( Component system , Binding binding ) throws Exception
+    {
+        return isHardware( system , binding.getPartA() , binding.getPartB() );
+    }
+    
+    public static boolean isHardware( Component system , String partA , String partB ) throws Exception
+    {
+        return isHardware( system , partA ) || isHardware( system , partB );
+    }
+            
+    public static boolean isHardware( Component system , String part ) throws Exception
+    {
+        String subName = getSubcomponentName( part );
+        String feaName = getFeatureName( part );
+        
+        if( subName == null )
+        {
+            throw new Exception( "The binding link to nobody!" );
+        }
+        
+        Subcomponent subcomponent = system.getSubcomponent( subName );
+        
+        if( subcomponent == null )
+        {
+            throw new Exception( "The subcomponent " + subName + " not found!" );
+        }
+        
+        Component c = subcomponent.getComponent();
+        
+        if( c == null )
+        {
+            throw new Exception( "The component " + subcomponent.getComponentReferenceName() + " not found!" );
+        }
+        
+        if( feaName == null )
+        {
+            return isHardware( c.getType() );
+        }
+        else
+        {
+            Component c1 = c.getFeature( feaName ).getComponent();
+            
+            if( c1 == null )
+            {
+                throw new Exception( "The component " + c.getFeature( feaName ).getComponentReferenceName() + " not found!" );
+            }
+            
+            return isHardware( c1.getType() );
+        }
+    }
+    
+    public static boolean isHardware( String type ) throws Exception
+    {
+        return Component.TYPE_DEVICE.equalsIgnoreCase( type )
+            || Component.TYPE_BUS.equalsIgnoreCase( type )
+            || Component.TYPE_PROCESSOR.equalsIgnoreCase( type )
+            || Component.TYPE_MEMORY.equalsIgnoreCase( type );
     }
     
     public static boolean isCompatibleWithWrapper( Component system , Binding binding )

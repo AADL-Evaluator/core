@@ -11,6 +11,7 @@ public class Binding implements Cloneable
     private String bus;                 // PartA connect to PartB by bus
     private String cpu;                 // bus is connect to a cpu
     private boolean candidateIsPartA;
+    private boolean hardware;
     
     public Binding() 
     {
@@ -125,6 +126,17 @@ public class Binding implements Cloneable
     public Binding setCandidateIsPartA( boolean candidateIsPartA )
     {
         this.candidateIsPartA = candidateIsPartA;
+        return this;
+    }
+
+    public boolean isHardware()
+    {
+        return hardware;
+    }
+
+    public Binding setHardware( boolean hardware )
+    {
+        this.hardware = hardware;
         return this;
     }
 
