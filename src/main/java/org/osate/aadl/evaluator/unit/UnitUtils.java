@@ -1,5 +1,8 @@
 package org.osate.aadl.evaluator.unit;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -23,6 +26,7 @@ public class UnitUtils
         }
         
         String valueStr = getValueAndUnit( value )[0];
+        
         if( isEmpty( valueStr ) )
         {
             return 0;
@@ -51,21 +55,17 @@ public class UnitUtils
             return valueWithUnit;
         }
         
-        double value = Double.parseDouble( parts[0] );
+        BigDecimal result = convert( 
+            Double.parseDouble( parts[0] ) , 
+            factor[ pos1 ] , 
+            factor[ pos2 ] , 
+            base 
+        );
         
-        if( pos1 < pos2 )
-        {
-            value = value / Math.pow( base , factor[ pos2 ] - factor[ pos1 ] );
-        }
-        else if( pos1 > pos2 )
-        {
-            value = value * Math.pow( base , factor[ pos1 ] - factor[ pos2 ] );
-        }
-        
-        return value + " " + unit;
+        return result + " " + unit;
     }
     
-    protected static String convert( String valueWithUnit , String unit , String[] units , int factor )
+    protected static String convert( final String valueWithUnit , final String unit , final String[] units , final int factor )
     {
         if( !hasUnits( valueWithUnit , units ) )
         {
@@ -85,18 +85,56 @@ public class UnitUtils
             return valueWithUnit;
         }
         
-        double value = Double.parseDouble( parts[0] );
+        BigDecimal result = convert( 
+            Double.parseDouble( parts[0] ) , 
+            pos1 , 
+            pos2 , 
+            factor
+        );
         
-        if( pos1 < pos2 )
-        {
-            value = value / Math.pow( factor , pos2 - pos1 );
-        }
-        else if( pos1 > pos2 )
-        {
-            value = value * Math.pow( factor , pos1 - pos2 );
-        }
+        return result + " " + unit;
+    }
+    
+    public static BigDecimal convert( double numero , int pos1 , int pos2 , int factor )
+    {
+        BigDecimal value = BigDecimal.valueOf( numero );
         
-        return value + " " + unit;
+        BigDecimal pow = new BigDecimal( factor )
+            .pow( pos1 - pos2 , MathContext.DECIMAL128 );
+        
+        BigDecimal result = value
+            .multiply( pow , MathContext.DECIMAL128 );
+        
+        /*
+        System.out.println( ">>>>>>>>>>>>>>>>>>>>>>>>>>> value: " + value );
+        System.out.println( ">>>>>>>>>>>>>>>>>>>>> pos1: " + pos2 );
+        System.out.println( ">>>>>>>>>>>>>>>>>>>>> pos2: " + pos1 );
+        System.out.println( ">>>>>>>>>>>>>>>>>>>>> pos.: " +  (pos1 - pos2) );
+        System.out.println( ">>>>>>>>>>>>>>>>>>>>>>>>>>> pow...: " + pow );
+        System.out.println( ">>>>>>>>>>>>>>>>>>>>>>>>>>> result: " + result );
+        */
+
+        return convert( value , pos1 , pos2 , factor );
+    }
+    
+    public static BigDecimal convert( BigDecimal value , int pos1 , int pos2 , int factor )
+    {
+        BigDecimal pow = new BigDecimal( factor )
+            .pow( pos1 - pos2 , MathContext.DECIMAL128 );
+        
+        BigDecimal result = value
+            .multiply( pow , MathContext.DECIMAL128 );
+        
+        /*
+        System.out.println( ">>>>>>>>>>>>>>>>>>>>>>>>>>> value: " + value );
+        System.out.println( ">>>>>>>>>>>>>>>>>>>>> pos1: " + pos2 );
+        System.out.println( ">>>>>>>>>>>>>>>>>>>>> pos2: " + pos1 );
+        System.out.println( ">>>>>>>>>>>>>>>>>>>>> pos.: " +  (pos1 - pos2) );
+        System.out.println( ">>>>>>>>>>>>>>>>>>>>>>>>>>> pow...: " + pow );
+        System.out.println( ">>>>>>>>>>>>>>>>>>>>>>>>>>> result: " + result );
+        */
+
+        return result;
     }
     
     protected static int binarySearch( final String[] units , final String unit , boolean casesensitive )
@@ -147,38 +185,34 @@ public class UnitUtils
             return valueWithUnit;
         }
         
-        double value = Double.parseDouble( parts[0] );
+        BigDecimal value = BigDecimal.valueOf( Double.parseDouble( parts[0] ) );
         //System.out.println( "value: " + value );
         
         if( isBits1 && !isBits2 )
         {
             // convert bit to byte
-            value /= BIT_BYTE;
+            //value /= BIT_BYTE;
+            value = value.divide( new BigDecimal( BIT_BYTE ) , MathContext.DECIMAL128 );
         }
         else if( !isBits1 && isBits2 )
         {
             // convert byte to bit
-            value *= BIT_BYTE;
+            //value *= BIT_BYTE;
+            value = value.multiply( new BigDecimal( BIT_BYTE ) , MathContext.DECIMAL128 );
         }
         
         //System.out.println( "value: " + value );
         
-        if( pos1 < pos2 )
-        {
-            // ex., Kbps to Mbps
-            value = value / Math.pow( distanceSize , pos2 - pos1 );
-            //System.out.println( "divisor: " + Math.pow( distanceSize , pos1 - pos2 ) );
-        }
-        else if( pos1 > pos2 )
-        {
-            // ex., Mbps to Kbps
-            value = value * Math.pow( distanceSize , pos1 - pos2 );
-            //System.out.println( "multiplicador: " + Math.pow( distanceSize , pos1 - pos2 ) );
-        }
+        BigDecimal result = convert( 
+            value.doubleValue() , 
+            pos1 , 
+            pos2 , 
+            distanceSize
+        );
         
         //System.out.println( "value: " + value );
         
-        return value + " " + unit;
+        return result + " " + unit;
     }
     
     private static boolean isBitUnit( String unit )
