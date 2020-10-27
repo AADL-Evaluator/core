@@ -1,14 +1,17 @@
 package org.osate.aadl.evaluator.reqspec;
 
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class SystemRequirement extends ReqspecElement
 {
     private SystemRequirements parent;
     
-    private final List<String> variables;
     private String category;
+    private final List<Variable> variables;
     private final List<Compute> computeds;
     private final List<Constant> constants;
     
@@ -64,7 +67,7 @@ public class SystemRequirement extends ReqspecElement
         this.category = category;
     }
     
-    public List<String> getVariables()
+    public List<Variable> getVariables()
     {
         return variables;
     }
@@ -184,6 +187,18 @@ public class SystemRequirement extends ReqspecElement
 
     public void setChangeUncertainty(String changeUncertainty) {
         this.changeUncertainty = changeUncertainty;
+    }
+
+    public Map<String,String> getConstantsMap()
+    {
+        Map<String,String> map = new TreeMap<>( String.CASE_INSENSITIVE_ORDER );
+        
+        for( Constant constant : constants )
+        {
+            map.put( constant.getName() , constant.getValue() );
+        }
+        
+        return map;
     }
     
 }

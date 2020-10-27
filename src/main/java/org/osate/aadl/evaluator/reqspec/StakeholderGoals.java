@@ -13,8 +13,8 @@ public class StakeholderGoals extends ReqspecElement
 
     public StakeholderGoals() 
     {
-        this.constants = new TreeMap<>();
-        this.goals = new TreeMap<>();
+        this.constants = new TreeMap<>( String.CASE_INSENSITIVE_ORDER );
+        this.goals = new TreeMap<>( String.CASE_INSENSITIVE_ORDER );
     }
 
     public Reqspec getParent()

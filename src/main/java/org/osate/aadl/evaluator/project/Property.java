@@ -132,7 +132,17 @@ public class Property extends Declaration implements Cloneable
         Map<String,Property> values = new HashMap<>();
         for( String part : v.split( OBJECT_SEPARATOR ) )
         {
+            if( part == null || part.trim().isEmpty() )
+            {
+                continue ;
+            }
+            
             String p[] = part.split( SEPARATOR );
+            
+            if( p == null || p.length == 0 )
+            {
+                continue ;
+            }
             
             values.put( 
                 p[0].trim() , 

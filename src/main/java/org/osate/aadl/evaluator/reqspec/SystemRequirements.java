@@ -21,9 +21,9 @@ public class SystemRequirements extends ReqspecElement
     {
         this.global = global;
         
-        this.constants = new TreeMap<>();
-        this.computeds = new TreeMap<>();
-        this.requirements = new TreeMap<>();
+        this.constants = new TreeMap<>( String.CASE_INSENSITIVE_ORDER );
+        this.computeds = new TreeMap<>( String.CASE_INSENSITIVE_ORDER );
+        this.requirements = new TreeMap<>( String.CASE_INSENSITIVE_ORDER );
     }
 
     public boolean isGlobal()

@@ -14,8 +14,8 @@ public class DocumentOrSection extends ReqspecElement
     public DocumentOrSection( boolean document ) 
     {
         this.document = document;
-        this.goals = new TreeMap<>();
-        this.requirements = new TreeMap<>();
+        this.goals = new TreeMap<>( String.CASE_INSENSITIVE_ORDER );
+        this.requirements = new TreeMap<>( String.CASE_INSENSITIVE_ORDER );
     }
 
     public Reqspec getParent()

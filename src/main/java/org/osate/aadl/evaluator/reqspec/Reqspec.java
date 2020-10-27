@@ -22,12 +22,12 @@ public class Reqspec
     {
         this.parent = project;
         
-        this.systems = new TreeMap<>();
-        this.globals = new TreeMap<>();
-        this.documents = new TreeMap<>();
-        this.sections = new TreeMap<>();
-        this.goals = new TreeMap<>();
-        this.organizations = new TreeMap<>();
+        this.systems = new TreeMap<>( String.CASE_INSENSITIVE_ORDER );
+        this.globals = new TreeMap<>( String.CASE_INSENSITIVE_ORDER );
+        this.documents = new TreeMap<>( String.CASE_INSENSITIVE_ORDER );
+        this.sections = new TreeMap<>( String.CASE_INSENSITIVE_ORDER );
+        this.goals = new TreeMap<>( String.CASE_INSENSITIVE_ORDER );
+        this.organizations = new TreeMap<>( String.CASE_INSENSITIVE_ORDER );
     }
 
     public Project getParent()

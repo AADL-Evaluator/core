@@ -20,7 +20,7 @@ public class Evolution implements Cloneable
     public Evolution( Component original )
     {
         this.system = original.clone();
-        this.components = new TreeMap<>();
+        this.components = new TreeMap<>( String.CASE_INSENSITIVE_ORDER );
         this.declarations = new LinkedList<>();
         this.candidates = new LinkedList<>();
         this.bindings = new LinkedList<>();
@@ -104,7 +104,7 @@ public class Evolution implements Cloneable
     
     private String getCompose()
     {
-        TreeMap<String,String> compose = new TreeMap<>();
+        TreeMap<String,String> compose = new TreeMap<>( String.CASE_INSENSITIVE_ORDER );
         
         for( Candidate candidade : candidates )
         {
