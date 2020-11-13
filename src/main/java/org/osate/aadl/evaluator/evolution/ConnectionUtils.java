@@ -36,7 +36,7 @@ public class ConnectionUtils
         
         if( connection.getSubcomponentB() == null )
         {
-            System.err.println( "The subcomponentB " 
+            System.out.println( "[ERROR] The subcomponentB " 
                 + connection.getSubcomponentAndFeatureB()  
                 + " in the connection " 
                 + connection 

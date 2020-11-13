@@ -121,7 +121,7 @@ public class DeclarationProcess
         }
         catch( java.lang.StringIndexOutOfBoundsException err )
         {
-            System.err.println( "line: " + line );
+            System.out.println( "[ERROR] line: " + line );
             throw err;
         }
     }
