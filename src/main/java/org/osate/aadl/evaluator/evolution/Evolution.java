@@ -15,11 +15,12 @@ public class Evolution implements Cloneable
     
     private final List<Declaration> declarations;       // declarations that will be changed
     private final List<Candidate> candidates;           // candidates that will change the declarations
-    private final List<Binding> bindings;                  // connections exists or will be created
+    private final List<Binding> bindings;               // connections exists or will be created
     
     public Evolution( Component original )
     {
         this.system = original.clone();
+        
         this.components = new TreeMap<>( String.CASE_INSENSITIVE_ORDER );
         this.declarations = new LinkedList<>();
         this.candidates = new LinkedList<>();

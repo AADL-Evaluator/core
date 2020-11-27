@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.osate.aadl.evaluator.automatic.AutomaticEvolution;
 import org.osate.aadl.evaluator.project.Component;
 import org.osate.aadl.evaluator.project.Connection;
 import org.osate.aadl.evaluator.project.Declaration;
@@ -90,7 +91,8 @@ public class EvolutionUtils
                 }
             }
             
-            if( ConnectionUtils.isToRemove( bindingCloned ) )
+            if( ConnectionUtils.isToRemove( bindingCloned ) 
+                || !BindingUtils.isAllPartsWereSetted( bindingCloned ) )
             {
                 ConnectionUtils.remove( cloned , bindingCloned );
             }
